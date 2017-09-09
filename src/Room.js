@@ -13,6 +13,10 @@ export default class Room {
     console.log('connected');
     let addedUser = false;
 
+    socket.on('SEND_MESSAGE', data => {
+      console.log(data);
+    });
+
     socket.on('typing', () => {
       socket.broadcast.emit('typing', { username: socket.username });
     });

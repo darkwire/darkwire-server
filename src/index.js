@@ -1,35 +1,38 @@
 import Koa from 'koa';
 import Io from 'koa-socket-2';
+import KoaBody from 'koa-body';
+import Router from 'koa-router';
 import DarkwireRoom from './Room.js';
 
 const app = new Koa();
-const io = new Io();
+const router = new Router();
+const koaBody = new KoaBody();
 const rooms = [];
 
 const PORT = process.env.PORT || 3000;
 
-io.attach(app);
+router.post('/handshake', koaBody, (ctx) => {
+  const { body } = ctx.request;
+  const { id } = body;
+  let ready = false;
 
-io.on('message', (ctx, data) => {
-  console.log('client sent data to message endpoint', data);
+  const roomExists = rooms.find((room) => room.id === id);
+  
+  if (!roomExists) {
+    const io = new Io(id);
+    const room = new Room(io, id);
+    rooms.push(room);
+  }
+
+  ready = true;
+
+  ctx.body = {
+    id: id,
+    ready,
+  };
 });
 
-io.on('join-room', (ctx, data) => {
-  const { id, username } = data;
-  const roomExists = rooms.find(room => {
-    if (room.id === id) {
-      return room;
-    }
-  });
-
-  const roomIo = new Io(id);
-  console.log(roomExists);
-
-
-  const room = new DarkwireRoom(roomIo, id);
-
-  console.log(room);
-});
+app.use(router.routes());
 
 app.use(async ctx => {
   ctx.body = { ready: true };
