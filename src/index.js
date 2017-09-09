@@ -22,7 +22,7 @@ router.post('/handshake', koaBody, (ctx) => {
   
   if (!roomExists) {
     const io = new Io(id);
-    const room = new Room(io, id);
+    const room = new DarkwireRoom(io, id);
     rooms.push(room);
   }
 
