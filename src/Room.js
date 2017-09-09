@@ -4,14 +4,25 @@ import uuid from 'uuid/v4';
 export default class Room {
   constructor(io = null, id = {}) {
     this._id = id;
-    this.io = io.of(this._id);
+    this.io = io;
     this.users = [];
     this.io.on('connection', socket => this.handleSocket(socket));
   }
 
   handleSocket(socket) {
+    console.log('connected');
+    let addedUser = false;
+
     socket.on('typing', () => {
       socket.broadcast.emit('typing', { username: socket.username });
     });
+
+    socket.on('stopped-typing', () => {
+      socket.broadcast.emit('stopped-typing', { username: socket.username })
+    });
+  }
+
+  get id() {
+    return this._id;
   }
 }
