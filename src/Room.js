@@ -7,7 +7,7 @@ export default class Room {
     this._io = io;
     this.users = [];
 
-    var room = io.of(`/${id}`);
+    const room = io.of(`/${id}`);
     room.on('connection', socket => this.handleSocket(socket));
   }
 
@@ -15,17 +15,10 @@ export default class Room {
     console.log('connected');
     let addedUser = false;
 
-    socket.on('SEND_MESSAGE', data => {
-      console.log(data);
+    socket.on('PAYLOAD', payload => {
+      socket.broadcast.emit('PAYLOAD', payload);
     });
 
-    socket.on('typing', () => {
-      socket.broadcast.emit('typing', { username: socket.username });
-    });
-
-    socket.on('stopped-typing', () => {
-      socket.broadcast.emit('stopped-typing', { username: socket.username })
-    });
   }
 
   get id() {
