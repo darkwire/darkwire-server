@@ -17,13 +17,13 @@ app.use(cors({
 }));
 router.post('/handshake', koaBody, (ctx) => {
   const { body } = ctx.request;
-  const { id } = body;
+  const { roomId } = body;
   let ready = false;
 
-  const roomExists = rooms.find((room) => room.id === id);
+  const roomExists = rooms.find((room) => room.id === roomId);
   
   if (!roomExists) {
-    const io = new Io(id);
+    const io = new Io(roomId);
     const room = new DarkwireRoom(io, id);
     rooms.push(room);
   }

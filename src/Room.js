@@ -4,9 +4,9 @@ import uuid from 'uuid/v4';
 export default class Room {
   constructor(io = null, id = {}) {
     this._id = id;
-    this.io = io;
+    this._io = io;
     this.users = [];
-    this.io.on('connection', socket => this.handleSocket(socket));
+    this._io.on('connection', socket => this.handleSocket(socket));
   }
 
   handleSocket(socket) {
@@ -28,5 +28,9 @@ export default class Room {
 
   get id() {
     return this._id;
+  }
+
+  get io() {
+    return this.io;
   }
 }
