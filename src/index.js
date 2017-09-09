@@ -12,7 +12,9 @@ const rooms = [];
 
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors({
+  credentials: true,
+}));
 router.post('/handshake', koaBody, (ctx) => {
   const { body } = ctx.request;
   const { id } = body;
