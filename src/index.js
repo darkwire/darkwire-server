@@ -1,6 +1,7 @@
 import Koa from 'koa';
 import Io from 'koa-socket-2';
 import KoaBody from 'koa-body';
+import cors from 'kcors';
 import Router from 'koa-router';
 import DarkwireRoom from './Room.js';
 
@@ -11,6 +12,7 @@ const rooms = [];
 
 const PORT = process.env.PORT || 3000;
 
+app.use(cors());
 router.post('/handshake', koaBody, (ctx) => {
   const { body } = ctx.request;
   const { id } = body;
