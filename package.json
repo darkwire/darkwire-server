@@ -5,16 +5,23 @@
   "license": "MIT",
   "dependencies": {
     "koa": "^2.3.0",
-    "koa-socket-2": "^1.0.13"
+    "koa-socket-2": "^1.0.13",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "uuid": "^3.1.0"
   },
   "scripts": {
-    "dev": "babel-node src/index.js"
+    "dev": "nodemon src/index.js --exec babel-node",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-eslint": "^7.2.3",
     "babel-preset-env": "^1.6.0",
     "babel-preset-stage-2": "^6.24.1",
-    "eslint": "^4.6.1"
+    "eslint": "^4.6.1",
+    "jest": "^21.0.2",
+    "nodemon": "^1.12.0"
   }
 }
