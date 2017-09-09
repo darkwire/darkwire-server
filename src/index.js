@@ -1,16 +1,22 @@
 import Koa from 'koa';
-import Io from 'koa-socket-2';
+import Io from 'socket.io';
 import KoaBody from 'koa-body';
 import cors from 'kcors';
 import Router from 'koa-router';
 import DarkwireRoom from './Room.js';
+import http from 'http';
 
 const app = new Koa();
+const server = http.createServer(app.callback())
+server.listen(3000);
+
 const router = new Router();
 const koaBody = new KoaBody();
 const rooms = [];
 
 const PORT = process.env.PORT || 3000;
+
+const io = Io(server);
 
 app.use(cors({
   credentials: true,
@@ -23,15 +29,14 @@ router.post('/handshake', koaBody, (ctx) => {
   const roomExists = rooms.find((room) => room.id === roomId);
   
   if (!roomExists) {
-    const io = new Io(roomId);
-    const room = new DarkwireRoom(io, id);
+    const room = new DarkwireRoom(io, roomId);
     rooms.push(room);
   }
 
   ready = true;
 
   ctx.body = {
-    id: id,
+    id: roomId,
     ready,
   };
 });
@@ -42,5 +47,4 @@ app.use(async ctx => {
   ctx.body = { ready: true };
 });
 
-app.listen(PORT);
 console.log(`Darkwire is online at port ${PORT}`);

@@ -8,9 +8,9 @@
     "koa": "^2.3.0",
     "koa-body": "^2.3.0",
     "koa-router": "^7.2.1",
-    "koa-socket-2": "^1.0.13",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
+    "socket.io": "^2.0.3",
     "uuid": "^3.1.0"
   },
   "scripts": {

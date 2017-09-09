@@ -6,7 +6,9 @@ export default class Room {
     this._id = id;
     this._io = io;
     this.users = [];
-    this._io.on('connection', socket => this.handleSocket(socket));
+
+    var room = io.of(`/${id}`);
+    room.on('connection', socket => this.handleSocket(socket));
   }
 
   handleSocket(socket) {
