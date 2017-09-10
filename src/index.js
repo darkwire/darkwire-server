@@ -13,6 +13,14 @@ const router = new Router();
 const koaBody = new KoaBody();
 const rooms = [];
 
+function removeRoomId(room) {
+  console.log('removing');
+  const roomIndex = rooms.indexOf(room);
+  if (roomIndex > -1) {
+    rooms.splice(roomIndex, 1);
+  }
+}
+
 app.use(cors({
   credentials: true,
 }));
@@ -25,7 +33,7 @@ router.post('/handshake', koaBody, (ctx) => {
   const roomExists = rooms.find((room) => room.id === roomId);
   
   if (!roomExists) {
-    const room = new DarkwireRoom(io, roomId);
+    const room = new DarkwireRoom(io, roomId, removeRoomId);
     rooms.push(room);
   }
 
@@ -50,3 +58,8 @@ server.listen(PORT, () => {
   console.log(`Darkwire is online at port ${PORT}`);
 });
 
+
+// DEBUG
+setInterval(() => {
+  console.log(rooms);
+}, 2000);
