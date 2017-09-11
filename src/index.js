@@ -1,10 +1,10 @@
+import http from 'http';
 import Koa from 'koa';
 import Io from 'socket.io';
 import KoaBody from 'koa-body';
 import cors from 'kcors';
 import Router from 'koa-router';
 import DarkwireRoom from './Room.js';
-import http from 'http';
 
 const app = new Koa();
 const PORT = process.env.PORT || 3000;

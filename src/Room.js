@@ -7,16 +7,26 @@ export default class Room {
     this._io = io;
     this._users = 0;
     this.selfDestruct = removeRoomId;
+    this._isLocked = false;
 
     const room = io.of(`/${id}`);
     room.on('connection', socket => this.handleSocket(socket));
   }
 
   handleSocket(socket) {
+    if (this.isLocked) {
+      return socket.disconnect('LOCKED');
+    }
+
     this._users++;
     console.log('connected', this._users);
     socket.on('PAYLOAD', payload => {
       socket.broadcast.emit('PAYLOAD', payload);
+    });
+
+    socket.on('LOCKED', data => {
+      this.isLocked = !this.isLocked;
+      socket.broadcast.emit('LOCKED', this.isLocked);
     });
 
     socket.on('disconnect', () => this.handleDisconnect());
@@ -40,6 +50,15 @@ export default class Room {
 
   get users() {
     return this._users;
+  }
+
+  set isLocked(isLocked) {
+    this._isLocked = isLocked;
+    return this;
+  }
+
+  get isLocked() {
+    return this._isLocked;
   }
 
 }
