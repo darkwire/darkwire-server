@@ -20,9 +20,11 @@ export default class Room {
       return socket.disconnect('LOCKED');
     }
 
+    socket.join(this._room.name)
+
     console.log('connected', this._users.length);
-    socket.on('PAYLOAD', payload => {
-      this._room.emit('PAYLOAD', payload);
+    socket.on('PAYLOAD', (payload) => {
+      socket.to(this._room.name).emit('PAYLOAD', payload);
     });
 
     socket.on('USER_ENTER', payload => {
@@ -30,12 +32,16 @@ export default class Room {
         socketId: socket.id,
         publicKey: payload.publicKey
       })
-      this._room.emit('USER_ENTER', payload);
+      socket.to(this._room.name).emit('USER_ENTER', payload);
+    })
+
+    socket.on('USER_ENTER_ECHO', payload => {
+      socket.to(this._room.name).emit('USER_ENTER_ECHO', payload);
     })
 
     socket.on('LOCKED', data => {
       this.isLocked = !this.isLocked;
-      this._room.emit('LOCKED', this.isLocked);
+      socket.to(this._room.name).emit('LOCKED', this.isLocked);
     });
 
     socket.on('disconnect', () => this.handleDisconnect(socket));
@@ -45,7 +51,9 @@ export default class Room {
     const disconnectedUser = this._users.find(u => u.socketId === socket.id)
     this._users = this._users.filter(u => u.socketId !== socket.id)
 
-    this._room.emit('USER_EXIT', {
+    socket.leave(this._room.name)
+
+    socket.to(this._room.name).emit('USER_EXIT', {
       publicKey: disconnectedUser.publicKey
     });
 
