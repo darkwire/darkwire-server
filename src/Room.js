@@ -5,12 +5,14 @@ export default class Room {
   constructor(io = null, id = {}, removeRoomId) {
     this._id = id;
     this._io = io;
-    this._users = 0;
+    this._users = [];
     this.selfDestruct = removeRoomId;
     this._isLocked = false;
 
     const room = io.of(`/${id}`);
-    room.on('connection', socket => this.handleSocket(socket));
+    this._room = room
+
+    this._room.on('connection', socket => this.handleSocket(socket));
   }
 
   handleSocket(socket) {
@@ -18,24 +20,38 @@ export default class Room {
       return socket.disconnect('LOCKED');
     }
 
-    this._users++;
-    console.log('connected', this._users);
+    console.log('connected', this._users.length);
     socket.on('PAYLOAD', payload => {
-      socket.broadcast.emit('PAYLOAD', payload);
+      this._room.emit('PAYLOAD', payload);
     });
+
+    socket.on('USER_ENTER', payload => {
+      this._users.push({
+        socketId: socket.id,
+        publicKey: payload.publicKey
+      })
+      this._room.emit('USER_ENTER', payload);
+    })
 
     socket.on('LOCKED', data => {
       this.isLocked = !this.isLocked;
-      socket.broadcast.emit('LOCKED', this.isLocked);
+      this._room.emit('LOCKED', this.isLocked);
     });
 
-    socket.on('disconnect', () => this.handleDisconnect());
+    socket.on('disconnect', () => this.handleDisconnect(socket));
   }
 
-  handleDisconnect() {
-    this._users--;
+  handleDisconnect(socket) {
+    const disconnectedUser = this._users.find(u => u.socketId === socket.id)
+    this._users = this._users.filter(u => u.socketId !== socket.id)
+
+    this._room.emit('USER_EXIT', {
+      publicKey: disconnectedUser.publicKey
+    });
+
     console.log('disconnected', this._users);
-    if (this.users === 0) {
+    if (this._users.length === 0) {
+      this._room.removeAllListeners('connection')
       return this.selfDestruct(this);
     }
   }
