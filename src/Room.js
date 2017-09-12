@@ -32,7 +32,7 @@ export default class Room {
         socketId: socket.id,
         publicKey: payload.publicKey
       })
-      socket.to(this._room.name).emit('USER_ENTER', payload);
+      this._room.emit('USER_ENTER', this._users.map(u => u.publicKey));
     })
 
     socket.on('USER_ENTER_ECHO', payload => {
