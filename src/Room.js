@@ -54,7 +54,7 @@ export default class Room {
     socket.leave(this._room.name)
 
     socket.to(this._room.name).emit('USER_EXIT', {
-      publicKey: disconnectedUser.publicKey
+      publicKey: disconnectedUser && disconnectedUser.publicKey
     });
 
     console.log('disconnected', this._users);
