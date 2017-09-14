@@ -42,6 +42,7 @@ router.post('/handshake', koaBody, (ctx) => {
   ctx.body = {
     id: roomId,
     ready,
+    isLocked: Boolean(roomExists && roomExists.isLocked)
   };
 });
 

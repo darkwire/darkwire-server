@@ -35,9 +35,14 @@ export default class Room {
       this._room.emit('USER_ENTER', this._users.map(u => u.publicKey));
     })
 
-    socket.on('LOCKED', data => {
+    socket.on('TOGGLE_LOCK_ROOM', data => {
       this.isLocked = !this.isLocked;
-      socket.to(this._room.name).emit('LOCKED', this.isLocked);
+      const user = this._users.find(u => u.socketId === socket.id)
+      
+      socket.to(this._room.name).emit('TOGGLE_LOCK_ROOM', {
+        locked: this.isLocked,
+        publicKey: user && user.publicKey
+      });
     });
 
     socket.on('disconnect', () => this.handleDisconnect(socket));
