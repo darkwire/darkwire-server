@@ -35,10 +35,6 @@ export default class Room {
       this._room.emit('USER_ENTER', this._users.map(u => u.publicKey));
     })
 
-    socket.on('USER_ENTER_ECHO', payload => {
-      socket.to(this._room.name).emit('USER_ENTER_ECHO', payload);
-    })
-
     socket.on('LOCKED', data => {
       this.isLocked = !this.isLocked;
       socket.to(this._room.name).emit('LOCKED', this.isLocked);
