@@ -31,7 +31,7 @@ router.post('/handshake', koaBody, (ctx) => {
   let ready = false;
 
   const roomExists = rooms.find((room) => room.id === roomId);
-  
+
   if (!roomExists) {
     const room = new DarkwireRoom(io, roomId, removeRoomId);
     rooms.push(room);
@@ -57,9 +57,3 @@ const io = Io(server);
 server.listen(PORT, () => {
   console.log(`Darkwire is online at port ${PORT}`);
 });
-
-
-// DEBUG
-setInterval(() => {
-  console.log(rooms);
-}, 2000);
