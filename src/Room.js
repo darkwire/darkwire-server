@@ -30,9 +30,13 @@ export default class Room {
     socket.on('USER_ENTER', payload => {
       this._users.push({
         socketId: socket.id,
-        publicKey: payload.publicKey
+        publicKey: payload.publicKey,
+        isOwner: this._users.length === 0,
       })
-      this._room.emit('USER_ENTER', this._users.map(u => u.publicKey));
+      this._room.emit('USER_ENTER', this._users.map(u => ({
+        publicKey: u.publicKey,
+        isOwner: u.isOwner,
+      })));
     })
 
     socket.on('TOGGLE_LOCK_ROOM', data => {
@@ -50,13 +54,17 @@ export default class Room {
 
   handleDisconnect(socket) {
     const disconnectedUser = this._users.find(u => u.socketId === socket.id)
-    this._users = this._users.filter(u => u.socketId !== socket.id)
+    this._users = this._users.filter(u => u.socketId !== socket.id).map((u, index) => ({
+      ...u,
+      isOwner: index === 0,
+    }))
 
     socket.leave(this._room.name)
 
-    socket.to(this._room.name).emit('USER_EXIT', {
-      publicKey: disconnectedUser && disconnectedUser.publicKey
-    });
+    socket.to(this._room.name).emit('USER_EXIT', this._users.map(u => ({
+      publicKey: u.publicKey,
+      isOwner: u.isOwner,
+    })));
 
     console.log('disconnected', this._users);
     if (this._users.length === 0) {
