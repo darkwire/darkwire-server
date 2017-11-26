@@ -22,7 +22,6 @@ export default class Room {
 
     socket.join(this._room.name)
 
-    console.log('connected', this._users.length);
     socket.on('PAYLOAD', (payload) => {
       socket.to(this._room.name).emit('PAYLOAD', payload);
     });
@@ -40,8 +39,13 @@ export default class Room {
     })
 
     socket.on('TOGGLE_LOCK_ROOM', data => {
+      const user = this._users.find(u => u.socketId === socket.id && u.isOwner)
+
+      if (!user) {
+        return
+      }
+
       this.isLocked = !this.isLocked;
-      const user = this._users.find(u => u.socketId === socket.id)
       
       socket.to(this._room.name).emit('TOGGLE_LOCK_ROOM', {
         locked: this.isLocked,
@@ -66,7 +70,6 @@ export default class Room {
       isOwner: u.isOwner,
     })));
 
-    console.log('disconnected', this._users);
     if (this._users.length === 0) {
       this._room.removeAllListeners('connection')
       return this.selfDestruct(this);
