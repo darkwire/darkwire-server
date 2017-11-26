@@ -1,10 +1,13 @@
 import http from 'http';
+import https from 'https';
 import Koa from 'koa';
 import Io from 'socket.io';
 import KoaBody from 'koa-body';
 import cors from 'kcors';
 import Router from 'koa-router';
 import DarkwireRoom from './Room.js';
+
+const env = process.env.NODE_ENV || 'development';
 
 const app = new Koa();
 const PORT = process.env.PORT || 3000;
@@ -14,7 +17,6 @@ const koaBody = new KoaBody();
 const rooms = [];
 
 function removeRoomId(room) {
-  console.log('removing');
   const roomIndex = rooms.indexOf(room);
   if (roomIndex > -1) {
     rooms.splice(roomIndex, 1);
@@ -53,7 +55,9 @@ app.use(async ctx => {
   ctx.body = { ready: true };
 });
 
-const server = http.createServer(app.callback());
+const protocol = env === 'development' ? http : https;
+
+const server = protocol.createServer(app.callback());
 const io = Io(server);
 
 server.listen(PORT, () => {

@@ -13,9 +13,13 @@
     "socket.io": "^2.0.3"
   },
   "scripts": {
+    "build": "rm -rf build && rm -rf dist && babel src -d dist/src && mkdir build && zip -r build/build.zip . -x \"src\" -x \".git\"",
     "dev": "nodemon src/index.js --exec babel-node",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "start": "node dist/src/index.js",
+    "predeploy": "npm run build",
+    "deploy": "eb deploy --staged"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
