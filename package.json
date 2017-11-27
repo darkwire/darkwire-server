@@ -1,8 +1,13 @@
 {
   "name": "darkwire-server",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "index.js",
   "license": "MIT",
+  "contributors": [{
+    "name": "Daniel Seripap"
+  }, {
+    "name": "Alan Friedman"
+  }],
   "dependencies": {
     "kcors": "2",
     "koa": "^2.3.0",
