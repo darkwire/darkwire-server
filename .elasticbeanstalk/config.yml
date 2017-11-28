@@ -1,0 +1,21 @@
+branch-defaults:
+  master:
+    environment: darkwire-prod
+environment-defaults:
+  darkwire-prod:
+    branch: null
+    repository: null
+global:
+  application_name: darkwire
+  default_ec2_keyname: alanfriedman-ec2-key
+  default_platform: arn:aws:elasticbeanstalk:us-east-1::platform/Node.js running on
+    64bit Amazon Linux/4.2.2
+  default_region: us-east-1
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: null
+  sc: git
+  workspace_type: Application
+deploy:
+  artifact: build/build.zip
