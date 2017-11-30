@@ -38,10 +38,13 @@ export default class Room {
       })));
     })
 
-    socket.on('TOGGLE_LOCK_ROOM', data => {
+    socket.on('TOGGLE_LOCK_ROOM', (data, callback) => {
       const user = this._users.find(u => u.socketId === socket.id && u.isOwner)
 
       if (!user) {
+        callback({
+          isLocked: this.isLocked,
+        })
         return
       }
 
@@ -51,6 +54,10 @@ export default class Room {
         locked: this.isLocked,
         publicKey: user && user.publicKey
       });
+
+      callback({
+        isLocked: this.isLocked,
+      })
     });
 
     socket.on('disconnect', () => this.handleDisconnect(socket));
