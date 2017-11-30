@@ -42,6 +42,9 @@ export default class Room {
       const user = this._users.find(u => u.socketId === socket.id && u.isOwner)
 
       if (!user) {
+        callback({
+          isLocked: this.isLocked,
+        })
         return
       }
 
