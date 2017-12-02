@@ -1,5 +1,7 @@
 FROM node:9.2
 
+LABEL maintainer "Darkwire Team <info@darkwire.io>"
+
 RUN apt-get update && apt-get install -y zip
 
 RUN mkdir -p /app

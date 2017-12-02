@@ -55,7 +55,7 @@ app.use(async ctx => {
   ctx.body = { ready: true };
 });
 
-const protocol = env === 'development' ? http : https;
+const protocol = process.env.PROTOCOL === 'http' ? http : https;
 
 const server = protocol.createServer(app.callback());
 const io = Io(server);
