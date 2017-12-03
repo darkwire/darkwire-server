@@ -6,6 +6,7 @@ import KoaBody from 'koa-body';
 import cors from 'kcors';
 import Router from 'koa-router';
 import DarkwireRoom from './Room.js';
+import config from './config';
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -46,6 +47,8 @@ router.post('/handshake', koaBody, (ctx) => {
     ready,
     isLocked: Boolean(roomExists && roomExists.isLocked),
     size: ((roomExists && roomExists.users.length) || 0) + 1,
+    version: config.version,
+    sha: config.sha,
   };
 });
 
@@ -55,7 +58,7 @@ app.use(async ctx => {
   ctx.body = { ready: true };
 });
 
-const protocol = process.env.PROTOCOL === 'http' ? http : https;
+const protocol = (process.env.PROTOCOL || 'http') === 'http' ? http : https;
 
 const server = protocol.createServer(app.callback());
 const io = Io(server);
