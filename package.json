@@ -27,7 +27,8 @@
     "test:watch": "jest --watch",
     "start": "node dist/src/index.js",
     "predeploy": "npm run build",
-    "deploy": "eb deploy --staged"
+    "deploy": "eb deploy --staged",
+    "release": "./release.sh"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
