@@ -1,6 +1,6 @@
 FROM node:9.2
 
-LABEL maintainer "Darkwire Team <info@darkwire.io>"
+LABEL maintainer "Darkwire Team <hello@darkwire.io>"
 
 RUN apt-get update && apt-get install -y zip
 
