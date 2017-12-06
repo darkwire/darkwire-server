@@ -15,13 +15,10 @@ RUN yarn
 COPY . /app
 RUN yarn build
 
-<<<<<<< HEAD
-EXPOSE 3000
-=======
 # Need src and git during build process but not after
 RUN rm -r /app/src
 RUN rm -r /app/.git
 
-EXPOSE 8080
->>>>>>> ae6faafc174a6c12fb499164b1f4259bfa91fced
+EXPOSE 3000
+
 CMD ["npm", "start"]
