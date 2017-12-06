@@ -12,13 +12,16 @@
     }
   ],
   "dependencies": {
+    "bluebird": "^3.5.1",
     "kcors": "2",
     "koa": "^2.3.0",
     "koa-body": "^2.3.0",
     "koa-router": "^7.2.1",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
-    "socket.io": "^2.0.3"
+    "redis": "^2.8.0",
+    "socket.io": "^2.0.3",
+    "socket.io-redis": "^5.2.0"
   },
   "scripts": {
     "build": "./build.sh",
