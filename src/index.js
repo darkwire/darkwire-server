@@ -104,7 +104,21 @@ const init = async () => {
 
   server.listen(PORT, () => {
     console.log(`Darkwire is online at port ${PORT}`);
-  });
+
+    setTimeout(() => {
+      /*
+      For any rooms with no users after 30 seconds we'll assume the clients
+      abandoned the room or they connected to a different EC2 instance after 
+      servers restarted, so we can delete them from this instance and close the room socket
+      */
+      rooms
+        .filter(r => r.usersConnected === 0)
+        .forEach(room => {
+          room.selfDestruct()
+        })
+    }, 30 * 1000)
+
+  })
 }
 
 init()

@@ -7,7 +7,7 @@ export default class Room {
     this._id = id;
     this._io = io;
     this._users = users || [];
-    this.selfDestruct = removeRoomId;
+    this.removeRoomId = removeRoomId;
     this._isLocked = isLocked || false;
 
     const room = io.of(`/${id}`);
@@ -15,6 +15,7 @@ export default class Room {
     this._redis = redis
     this._createdAt = Date.now()
     this._updatedAt = Date.now()
+    this._usersConnected = 0
 
     this._room.on('connection', socket => this.handleSocket(socket));
   }
@@ -49,6 +50,8 @@ export default class Room {
     if (this.isLocked) {
       return socket.disconnect('LOCKED');
     }
+
+    this._usersConnected++
 
     socket.join(this._room.name)
 
@@ -114,10 +117,18 @@ export default class Room {
     })));
 
     if (this._users.length === 0) {
-      this._room.removeAllListeners('connection')
       await this.destroy()
-      return this.selfDestruct(this);
+      this.selfDestruct()
     }
+  }
+
+  selfDestruct() {
+    this._room.removeAllListeners('connection')
+    this.removeRoomId(this);
+  }
+
+  get usersConnected() {
+    return this._usersConnected;
   }
 
   get id() {
