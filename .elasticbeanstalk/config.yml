@@ -1,8 +1,8 @@
 branch-defaults:
   master:
-    environment: darkwire-prod
+    environment: darkwire-v2-prod-alb
 environment-defaults:
-  darkwire-prod:
+  darkwire-v2-prod-alb:
     branch: null
     repository: null
 global:
