@@ -6,10 +6,21 @@ This is the backend for Darkwire. It requires [darkwire-client](https://github.c
 
 ```
 $ yarn
+```
+
+### Start dev redis server
+
+```
+$ docker-compose up -d
+```
+
+### Start Dev Server
+
+```
 $ yarn dev
 ```
 
-A dev server is now running on port 3000.
+Darkwire server is running on default port 3000.
 
 ## Building Docker Container
 
