@@ -9,7 +9,7 @@ import config from './config';
 import bluebird from 'bluebird';
 import Redis from 'redis';
 import socketRedis from 'socket.io-redis';
-import Socket from './Socket';
+import Socket from './socket';
 
 bluebird.promisifyAll(Redis.RedisClient.prototype);
 bluebird.promisifyAll(Redis.Multi.prototype);
