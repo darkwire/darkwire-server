@@ -52,14 +52,20 @@ export default class Socket {
   }
 
   async handleSocket(socket) {
-    const room = await this.fetchRoom() || {}
-
     socket.on('PAYLOAD', (payload) => {
       socket.to(this._roomId).emit('PAYLOAD', payload);
     });
 
     socket.on('USER_ENTER', async payload => {
-      const room = await this.fetchRoom() || {}
+      let room = await this.fetchRoom()
+      if (_.isEmpty(room)) {
+        room = {
+          id: this._roomId,
+          users: [],
+          isLocked: false,
+          createdAt: Date.now(),
+        }
+      }
 
       const newRoom = {
         ...room,

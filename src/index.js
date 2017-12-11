@@ -36,27 +36,15 @@ app.use(cors({
 router.post('/handshake', koaBody, async (ctx) => {
   const { body } = ctx.request;
   const { roomId } = body;
-  let ready = false;
 
   let roomExists = await redis.hgetAsync('rooms', roomId)
   if (roomExists) {
     roomExists = JSON.parse(roomExists)
   }
 
-  if (!roomExists) {
-    await redis.hsetAsync('rooms', roomId, JSON.stringify({
-      id: roomId,
-      users: [],
-      isLocked: false,
-      createdAt: Date.now(),
-    }))
-  }
-
-  ready = true;
-
   ctx.body = {
     id: roomId,
-    ready,
+    ready: true,
     isLocked: Boolean(roomExists && roomExists.isLocked),
     size: ((roomExists && roomExists.users.length) || 0) + 1,
     version: config.version,
