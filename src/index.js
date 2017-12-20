@@ -1,3 +1,4 @@
+require('dotenv').config()
 import http from 'http';
 import https from 'https';
 import Koa from 'koa';
@@ -10,6 +11,11 @@ import bluebird from 'bluebird';
 import Redis from 'redis';
 import socketRedis from 'socket.io-redis';
 import Socket from './socket';
+import crypto from 'crypto'
+
+if (typeof process.env.ROOM_HASH_SECRET === 'undefined') {
+  throw new Error('ROOM_HASH_SECRET environment variable is required. We recommend using a 128 bit UUID.')
+}
 
 bluebird.promisifyAll(Redis.RedisClient.prototype);
 bluebird.promisifyAll(Redis.Multi.prototype);
@@ -37,7 +43,9 @@ router.post('/handshake', koaBody, async (ctx) => {
   const { body } = ctx.request;
   const { roomId } = body;
 
-  let roomExists = await redis.hgetAsync('rooms', roomId)
+  const roomIdHash = getRoomIdHash(roomId)
+
+  let roomExists = await redis.hgetAsync('rooms', roomIdHash)
   if (roomExists) {
     roomExists = JSON.parse(roomExists)
   }
@@ -67,16 +75,25 @@ io.adapter(socketRedis({
   port: process.env.REDIS_PORT || 6379
 }));
 
+const getRoomIdHash = (id) => {
+  return crypto
+    .createHmac('sha256', process.env.ROOM_HASH_SECRET)
+    .update(id)
+    .digest('hex')
+}
+
 export const getIO = () => io
 
 io.on('connection', async (socket) => {
   const roomId = socket.handshake.query.roomId
 
-  let room = await redis.hgetAsync('rooms', roomId)
+  const roomIdHash = getRoomIdHash(roomId)
+
+  let room = await redis.hgetAsync('rooms', roomIdHash)
   room = JSON.parse(room || '{}')
 
   new Socket({
-    roomId,
+    roomId: roomIdHash,
     socket,
     room,
   })
