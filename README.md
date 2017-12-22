@@ -28,3 +28,10 @@ Darkwire server is running on default port 3000.
 $ docker build -t dw-server .
 $ docker run -p 80:3000 dw-server
 ```
+
+## Running Docker Container
+
+```
+$ docker run --name dw-redis -d redis
+$ docker run --name dw-server -p 80:3000 --link dw-redis:redis dw-server
+```
