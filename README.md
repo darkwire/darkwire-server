@@ -1,6 +1,8 @@
 # Darkwire Server
 
-This is the backend for Darkwire. It requires [darkwire-client](https://github.com/seripap/darkwire-client) in order to run.
+This is the backend for [Darkwire](https://github.com/seripap/darkwire.io). It requires [darkwire-client](https://github.com/seripap/darkwire-client) in order to run.
+
+For more information about how Darkwire works, visit the [main repository](https://github.com/seripap/darkwire.io).
 
 ## Development
 

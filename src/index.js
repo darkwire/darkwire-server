@@ -5,11 +5,11 @@ import Io from 'socket.io';
 import KoaBody from 'koa-body';
 import cors from 'kcors';
 import Router from 'koa-router';
-import DarkwireRoom from './Room.js';
 import config from './config';
 import bluebird from 'bluebird';
 import Redis from 'redis';
 import socketRedis from 'socket.io-redis';
+import Socket from './socket';
 
 bluebird.promisifyAll(Redis.RedisClient.prototype);
 bluebird.promisifyAll(Redis.Multi.prototype);
@@ -19,6 +19,8 @@ const redis = Redis.createClient({
   port: process.env.REDIS_PORT || 6379
 })
 
+export const getRedis = () => redis
+
 const env = process.env.NODE_ENV || 'development';
 
 const app = new Koa();
@@ -26,57 +28,23 @@ const PORT = process.env.PORT || 3000;
 
 const router = new Router();
 const koaBody = new KoaBody();
-const rooms = [];
-
-function removeRoomId(room) {
-  const roomIndex = rooms.indexOf(room);
-  if (roomIndex > -1) {
-    rooms.splice(roomIndex, 1);
-  }
-}
 
 app.use(cors({
   credentials: true,
 }));
 
-const fetchRooms = async () => {
-  const res = await redis.hgetallAsync('rooms')
-  Object.keys(res || {}).forEach(key => {
-    const val = JSON.parse(res[key])
-    const room = new DarkwireRoom({
-      io,
-      removeRoomId,
-      redis,
-      users: val.users,
-      id: val.id,
-      isLocked: val.isLocked,
-    });
-    rooms.push(room);
-  })
-}
-
-router.post('/handshake', koaBody, (ctx) => {
+router.post('/handshake', koaBody, async (ctx) => {
   const { body } = ctx.request;
   const { roomId } = body;
-  let ready = false;
 
-  const roomExists = rooms.find((room) => room.id === roomId);
-
-  if (!roomExists) {
-    const room = new DarkwireRoom({
-      io,
-      removeRoomId,
-      redis,
-      id: roomId,
-    });
-    rooms.push(room);
+  let roomExists = await redis.hgetAsync('rooms', roomId)
+  if (roomExists) {
+    roomExists = JSON.parse(roomExists)
   }
-
-  ready = true;
 
   ctx.body = {
     id: roomId,
-    ready,
+    ready: true,
     isLocked: Boolean(roomExists && roomExists.isLocked),
     size: ((roomExists && roomExists.users.length) || 0) + 1,
     version: config.version,
@@ -99,12 +67,25 @@ io.adapter(socketRedis({
   port: process.env.REDIS_PORT || 6379
 }));
 
-const init = async () => {
-  await fetchRooms()
+export const getIO = () => io
 
+io.on('connection', async (socket) => {
+  const roomId = socket.handshake.query.roomId
+
+  let room = await redis.hgetAsync('rooms', roomId)
+  room = JSON.parse(room || '{}')
+
+  new Socket({
+    roomId,
+    socket,
+    room,
+  })
+})
+
+const init = async () => {
   server.listen(PORT, () => {
     console.log(`Darkwire is online at port ${PORT}`);
-  });
+  })
 }
 
 init()
