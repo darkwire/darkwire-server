@@ -76,6 +76,9 @@ io.adapter(socketRedis({
 }));
 
 const getRoomIdHash = (id) => {
+  if (env === 'development') {
+    return id
+  }
   return crypto
     .createHmac('sha256', process.env.ROOM_HASH_SECRET)
     .update(id)
