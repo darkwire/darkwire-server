@@ -13,7 +13,6 @@
   ],
   "dependencies": {
     "bluebird": "^3.5.1",
-    "dotenv": "^4.0.0",
     "kcors": "2",
     "koa": "^2.3.0",
     "koa-body": "^2.3.0",
@@ -23,7 +22,8 @@
     "moment": "^2.18.1",
     "redis": "^2.8.0",
     "socket.io": "^2.0.3",
-    "socket.io-redis": "^5.2.0"
+    "socket.io-redis": "^5.2.0",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "build": "./build.sh",
@@ -40,6 +40,7 @@
     "babel-eslint": "^7.2.3",
     "babel-preset-env": "^1.6.0",
     "babel-preset-stage-2": "^6.24.1",
+    "dotenv": "^8.0.0",
     "eslint": "^4.6.1",
     "jest": "^21.0.2",
     "nodemon": "^1.12.0"
