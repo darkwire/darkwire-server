@@ -19,6 +19,7 @@
     "koa-body": "^2.3.0",
     "koa-router": "^7.2.1",
     "lodash": "^4.17.4",
+    "mailgun-js": "^0.22.0",
     "moment": "^2.18.1",
     "redis": "^2.8.0",
     "socket.io": "^2.0.3",
