@@ -21,10 +21,7 @@ if (typeof process.env.ROOM_HASH_SECRET === 'undefined') {
 bluebird.promisifyAll(Redis.RedisClient.prototype);
 bluebird.promisifyAll(Redis.Multi.prototype);
 
-const redis = Redis.createClient({
-  host: process.env.REDIS_HOST || 'localhost',
-  port: process.env.REDIS_PORT || 6379
-})
+const redis = Redis.createClient(process.env.REDIS_URL)
 
 export const getRedis = () => redis
 
