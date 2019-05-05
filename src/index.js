@@ -12,6 +12,7 @@ import Redis from 'redis';
 import socketRedis from 'socket.io-redis';
 import Socket from './socket';
 import crypto from 'crypto'
+import mailer from './utils/mailer';
 
 if (typeof process.env.ROOM_HASH_SECRET === 'undefined') {
   throw new Error('ROOM_HASH_SECRET environment variable is required. We recommend using a 128 bit UUID.')
@@ -58,6 +59,28 @@ router.post('/handshake', koaBody, async (ctx) => {
     version: config.version,
     sha: config.sha,
   };
+});
+
+router.post('/abuse/:roomId', koaBody, async (ctx) => {
+  let { roomId } = ctx.params;
+
+  roomId = roomId.trim();
+
+  if (process.env.ABUSE_FROM_EMAIL_ADDRESS && process.env.ABUSE_TO_EMAIL_ADDRESS) {
+    const abuseForRoomExists = await redis.hgetAsync('abuse', roomId);
+    if (!abuseForRoomExists) {
+      mailer.send({
+        from: process.env.ABUSE_FROM_EMAIL_ADDRESS,
+        to: process.env.ABUSE_TO_EMAIL_ADDRESS,
+        subject: 'Darkwire Abuse Notification',
+        text: `Room ID: ${roomId}`
+      });
+    }
+  }
+  
+  await redis.hincrbyAsync('abuse', roomId, 1);
+
+  ctx.status = 200;
 });
 
 app.use(router.routes());
