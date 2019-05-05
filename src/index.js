@@ -90,10 +90,7 @@ const protocol = (process.env.PROTOCOL || 'http') === 'http' ? http : https;
 
 const server = protocol.createServer(app.callback());
 const io = Io(server);
-io.adapter(socketRedis({
-  host: process.env.REDIS_HOST || 'localhost',
-  port: process.env.REDIS_PORT || 6379
-}));
+io.adapter(socketRedis(process.env.REDIS_URL));
 
 const getRoomIdHash = (id) => {
   if (env === 'development') {
