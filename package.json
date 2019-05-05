@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "bluebird": "^3.5.1",
+    "dotenv": "^8.0.0",
     "kcors": "2",
     "koa": "^2.3.0",
     "koa-body": "^2.3.0",
@@ -40,7 +41,6 @@
     "babel-eslint": "^7.2.3",
     "babel-preset-env": "^1.6.0",
     "babel-preset-stage-2": "^6.24.1",
-    "dotenv": "^8.0.0",
     "eslint": "^4.6.1",
     "jest": "^21.0.2",
     "nodemon": "^1.12.0"
