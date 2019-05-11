@@ -36,6 +36,6 @@
     "heroku-redis",
     {
       "plan": "heroku-redis:hobby-dev"
-    },
+    }
   ]
 }
