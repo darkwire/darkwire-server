@@ -1,9 +1,0 @@
-{
-	"folders":
-	[
-		{
-			"path": ".",
-      "binary_file_patterns": ["node_modules/", "build/", "dist/"]
-		}
-	]
-}

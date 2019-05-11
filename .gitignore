@@ -4,3 +4,4 @@ build
 *.log
 *.rdb
 .env
+*sublime*
