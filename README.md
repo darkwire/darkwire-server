@@ -4,6 +4,8 @@ This is the backend for [Darkwire](https://github.com/seripap/darkwire.io). It r
 
 For more information about how Darkwire works, visit the [main repository](https://github.com/seripap/darkwire.io).
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 ## Development
 
 ```
