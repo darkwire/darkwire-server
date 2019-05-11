@@ -8,9 +8,16 @@ const {
 const apiKey = MAILGUN_API_KEY;
 const domain = MAILGUN_DOMAIN;
 
-const mailgun = require('mailgun-js')({apiKey, domain});
+let mailgun;
+
+if (apiKey && domain) {
+  mailgun = require('mailgun-js')({apiKey, domain});
+}
 
 module.exports.send = (data) => {
+  if (!mailgun) {
+    return;
+  }
   mailgun.messages().send(data, function (error, body) {
 
   });

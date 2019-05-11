@@ -1,0 +1,41 @@
+{
+  "name": "Darkwire Server",
+  "description": "End-to-end encrypted web chat",
+  "keywords": [
+    "cryptography",
+    "chat",
+    "privacy"
+  ],
+  "website": "https://darkwire.io",
+  "repository": "https://github.com/darkwire/darkwire-server",
+  "env": {
+    "ROOM_HASH_SECRET": {
+      "description": "A secret key for encryption",
+      "generator": "secret",
+      "required": true
+    },
+    "MAILGUN_API_KEY": {
+      "description": "Mailgun API Key (only required for abuse reporting)",
+      "required": false
+    },
+    "ABUSE_TO_EMAIL_ADDRESS": {
+      "description": "Where to send abuse reports (only required for abuse reporting)",
+      "required": false
+    },
+    "MAILGUN_DOMAIN": {
+      "description": "Mailgun domain (only required for abuse reporting)",
+      "required": false
+    },
+    "ABUSE_FROM_EMAIL_ADDRESS": {
+      "description": "From address on abuse emails (only required for abuse reporting)",
+      "required": false
+    }
+  },
+  "image": "heroku/nodejs",
+  "addons": [
+    "heroku-redis",
+    {
+      "plan": "heroku-redis:hobby-dev"
+    },
+  ]
+}
