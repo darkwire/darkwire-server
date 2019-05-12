@@ -80,10 +80,6 @@ router.post('/abuse/:roomId', koaBody, async (ctx) => {
 
 app.use(router.routes());
 
-app.use(async ctx => {
-  ctx.body = { ready: true };
-});
-
 const protocol = (process.env.PROTOCOL || 'http') === 'http' ? http : https;
 
 const server = protocol.createServer(app.callback());
