@@ -13,6 +13,7 @@ import socketRedis from 'socket.io-redis';
 import Socket from './socket';
 import crypto from 'crypto'
 import mailer from './utils/mailer';
+import koaStatic from 'koa-static';
 
 bluebird.promisifyAll(Redis.RedisClient.prototype);
 bluebird.promisifyAll(Redis.Multi.prototype);
@@ -28,8 +29,6 @@ const PORT = process.env.PORT || 3000;
 
 const router = new Router();
 const koaBody = new KoaBody();
-
-app.use(require('koa-static')('../client/build'));
 
 app.use(cors({
   credentials: true,
@@ -79,6 +78,8 @@ router.post('/abuse/:roomId', koaBody, async (ctx) => {
 });
 
 app.use(router.routes());
+
+app.use(koaStatic('../client/build'));
 
 const protocol = (process.env.PROTOCOL || 'http') === 'http' ? http : https;
 
