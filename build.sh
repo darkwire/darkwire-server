@@ -1,6 +1,6 @@
 rm -rf build
 rm -rf dist
-babel src -d dist/src --copy-files
+npx babel src -d dist/src --copy-files
 
 # version=`git describe --abbrev=0 --tags`
 # sha=`git rev-parse HEAD`
