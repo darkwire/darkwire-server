@@ -7,3 +7,5 @@ cd darkwire-client
 yarn
 
 SKIP_PREFLIGHT_CHECK=true yarn react-scripts build
+
+cd ../
