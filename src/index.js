@@ -13,10 +13,8 @@ import socketRedis from 'socket.io-redis';
 import Socket from './socket';
 import crypto from 'crypto'
 import mailer from './utils/mailer';
-
-if (typeof process.env.ROOM_HASH_SECRET === 'undefined') {
-  throw new Error('ROOM_HASH_SECRET environment variable is required. We recommend using a 128 bit UUID.')
-}
+import koaStatic from 'koa-static';
+import koaSend from 'koa-send';
 
 bluebird.promisifyAll(Redis.RedisClient.prototype);
 bluebird.promisifyAll(Redis.Multi.prototype);
@@ -82,9 +80,18 @@ router.post('/abuse/:roomId', koaBody, async (ctx) => {
 
 app.use(router.routes());
 
-app.use(async ctx => {
-  ctx.body = { ready: true };
-});
+const clientDistDirectory = process.env.CLIENT_DIST_DIRECTORY;
+if (clientDistDirectory) {
+  app.use(koaStatic(clientDistDirectory));
+
+  app.use(async (ctx) => {
+    await koaSend(ctx, 'index.html', { root: clientDistDirectory });
+  })
+} else {
+  app.use(async ctx => {
+    ctx.body = { ready: true };
+  });
+}
 
 const protocol = (process.env.PROTOCOL || 'http') === 'http' ? http : https;
 
@@ -92,14 +99,21 @@ const server = protocol.createServer(app.callback());
 const io = Io(server);
 io.adapter(socketRedis(process.env.REDIS_URL));
 
+const roomHashSecret = process.env.ROOM_HASH_SECRET;
+
 const getRoomIdHash = (id) => {
   if (env === 'development') {
     return id
   }
-  return crypto
-    .createHmac('sha256', process.env.ROOM_HASH_SECRET)
-    .update(id)
-    .digest('hex')
+
+  if (roomHashSecret) {
+    return crypto
+      .createHmac('sha256', roomHashSecret)
+      .update(id)
+      .digest('hex')
+  }
+
+  return crypto.createHash('sha256').update(id).digest('hex');
 }
 
 export const getIO = () => io
