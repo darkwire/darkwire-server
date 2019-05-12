@@ -81,10 +81,10 @@ router.post('/abuse/:roomId', koaBody, async (ctx) => {
 
 app.use(router.routes());
 
-app.use(koaStatic('../darkwire-client/build'));
+app.use(koaStatic('../client/build'));
 
 app.use(async (ctx) => {
-  await koaSend(ctx, 'index.html', { root: '../darkwire-client/build' });
+  await koaSend(ctx, 'index.html', { root: '../client/build' });
 })
 
 const protocol = (process.env.PROTOCOL || 'http') === 'http' ? http : https;
