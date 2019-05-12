@@ -10,6 +10,3 @@ echo $sha
 
 perl -pi -e "s/SHA/$sha/g" dist/src/config.json
 perl -pi -e "s/VERSION/$version/g" dist/src/config.json
-
-mkdir build
-zip -r build/build.zip . -x \"src\" -x \".git\"
