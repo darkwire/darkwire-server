@@ -6,4 +6,4 @@ cd darkwire-client
 
 yarn
 
-yarn react-scripts build
+SKIP_PREFLIGHT_CHECK=true yarn react-scripts build
