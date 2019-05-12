@@ -14,6 +14,8 @@ import Socket from './socket';
 import crypto from 'crypto'
 import mailer from './utils/mailer';
 import koaStatic from 'koa-static';
+import koaSend from 'koa-send';
+import path from 'path';
 
 bluebird.promisifyAll(Redis.RedisClient.prototype);
 bluebird.promisifyAll(Redis.Multi.prototype);
@@ -79,7 +81,13 @@ router.post('/abuse/:roomId', koaBody, async (ctx) => {
 
 app.use(router.routes());
 
-app.use(koaStatic('../client/build'));
+// const clientIndex = fs.readFileSync('../client/build/index.html');
+
+app.use(koaStatic('../darkwire-client/build'));
+
+app.use(async (ctx) => {
+  await koaSend(ctx, 'index.html', { root: '../darkwire-client/build' });
+})
 
 const protocol = (process.env.PROTOCOL || 'http') === 'http' ? http : https;
 
