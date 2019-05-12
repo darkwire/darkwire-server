@@ -15,7 +15,6 @@ import crypto from 'crypto'
 import mailer from './utils/mailer';
 import koaStatic from 'koa-static';
 import koaSend from 'koa-send';
-import path from 'path';
 
 bluebird.promisifyAll(Redis.RedisClient.prototype);
 bluebird.promisifyAll(Redis.Multi.prototype);
