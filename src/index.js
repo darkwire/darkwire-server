@@ -33,7 +33,7 @@ const PORT = process.env.PORT || 3000;
 const router = new Router();
 const koaBody = new KoaBody();
 
-app.use(require('koa-static')('darkwire-client/build'));
+app.use(require('koa-static')('../client'));
 
 app.use(cors({
   credentials: true,
