@@ -24,6 +24,10 @@
     "ABUSE_FROM_EMAIL_ADDRESS": {
       "description": "From address on abuse emails (only required for abuse reporting)",
       "required": false
+    },
+    "ROOM_HASH_SECRET": {
+      "description": "Optional secret key to generate room ID hash",
+      "required": false
     }
   },
   "image": "heroku/nodejs",

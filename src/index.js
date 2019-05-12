@@ -100,9 +100,18 @@ const server = protocol.createServer(app.callback());
 const io = Io(server);
 io.adapter(socketRedis(process.env.REDIS_URL));
 
+const roomHashSecret = process.env.ROOM_HASH_SECRET;
+
 const getRoomIdHash = (id) => {
   if (env === 'development') {
     return id
+  }
+
+  if (roomHashSecret) {
+    return crypto
+      .createHmac('sha256', roomHashSecret)
+      .update(id)
+      .digest('hex')
   }
 
   return crypto.createHash('sha256').update(id).digest('hex');
