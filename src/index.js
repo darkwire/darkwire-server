@@ -81,8 +81,6 @@ router.post('/abuse/:roomId', koaBody, async (ctx) => {
 
 app.use(router.routes());
 
-// const clientIndex = fs.readFileSync('../client/build/index.html');
-
 app.use(koaStatic('../darkwire-client/build'));
 
 app.use(async (ctx) => {
