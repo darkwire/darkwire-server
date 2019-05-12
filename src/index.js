@@ -81,11 +81,18 @@ router.post('/abuse/:roomId', koaBody, async (ctx) => {
 
 app.use(router.routes());
 
-app.use(koaStatic('../client/build'));
+const clientDistDirectory = process.env.CLIENT_DIST_DIRECTORY;
+if (clientDistDirectory) {
+  app.use(koaStatic(clientDistDirectory));
 
-app.use(async (ctx) => {
-  await koaSend(ctx, 'index.html', { root: '../client/build' });
-})
+  app.use(async (ctx) => {
+    await koaSend(ctx, 'index.html', { root: clientDistDirectory });
+  })
+} else {
+  app.use(async ctx => {
+    ctx.body = { ready: true };
+  });
+}
 
 const protocol = (process.env.PROTOCOL || 'http') === 'http' ? http : https;
 
