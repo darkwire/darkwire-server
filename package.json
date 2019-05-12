@@ -35,10 +35,7 @@
     "dev": "nodemon src/index.js --exec babel-node",
     "test": "jest",
     "test:watch": "jest --watch",
-    "start": "node dist/src/index.js",
-    "predeploy": "npm run build",
-    "deploy": "eb deploy --staged",
-    "release": "./release.sh"
+    "start": "node dist/src/index.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",

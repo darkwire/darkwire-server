@@ -26,7 +26,7 @@ export const getRedis = () => redis
 const env = process.env.NODE_ENV || 'development';
 
 const app = new Koa();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 const router = new Router();
 const koaBody = new KoaBody();
