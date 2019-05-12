@@ -9,11 +9,6 @@
   "website": "https://darkwire.io",
   "repository": "https://github.com/darkwire/darkwire-server",
   "env": {
-    "ROOM_HASH_SECRET": {
-      "description": "A secret key for encryption",
-      "generator": "secret",
-      "required": true
-    },
     "MAILGUN_API_KEY": {
       "description": "Mailgun API Key (only required for abuse reporting)",
       "required": false

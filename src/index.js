@@ -14,10 +14,6 @@ import Socket from './socket';
 import crypto from 'crypto'
 import mailer from './utils/mailer';
 
-if (typeof process.env.ROOM_HASH_SECRET === 'undefined') {
-  throw new Error('ROOM_HASH_SECRET environment variable is required. We recommend using a 128 bit UUID.')
-}
-
 bluebird.promisifyAll(Redis.RedisClient.prototype);
 bluebird.promisifyAll(Redis.Multi.prototype);
 
@@ -98,10 +94,8 @@ const getRoomIdHash = (id) => {
   if (env === 'development') {
     return id
   }
-  return crypto
-    .createHmac('sha256', process.env.ROOM_HASH_SECRET)
-    .update(id)
-    .digest('hex')
+
+  return crypto.createHash('sha256').update(id).digest('hex');
 }
 
 export const getIO = () => io
