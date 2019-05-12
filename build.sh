@@ -6,4 +6,4 @@ cd darkwire-client
 
 yarn
 
-yarn build
+yarn react-scripts build
