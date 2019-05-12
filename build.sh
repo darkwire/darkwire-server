@@ -4,4 +4,6 @@ git clone https://github.com/darkwire/darkwire-client.git
 
 cd darkwire-client
 
+yarn
+
 yarn build
