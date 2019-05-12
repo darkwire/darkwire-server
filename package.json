@@ -12,6 +12,8 @@
     }
   ],
   "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/runtime": "^7.4.4",
     "bluebird": "^3.5.1",
     "dotenv": "^8.0.0",
     "kcors": "2",
@@ -43,7 +45,6 @@
     "@babel/core": "^7.4.4",
     "@babel/node": "^7.2.2",
     "@babel/plugin-transform-async-to-generator": "^7.4.4",
-    "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "@babel/runtime": "^7.4.4",
     "eslint": "^4.6.1",
